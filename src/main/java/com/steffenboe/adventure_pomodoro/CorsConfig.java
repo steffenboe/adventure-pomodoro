@@ -9,7 +9,7 @@ public class CorsConfig implements WebFluxConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/todos/**") // Path pattern for your API
+        registry.addMapping("/**") // Path pattern for your API
                 .allowedOrigins("http://localhost:3000") // Your React app's origin
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Allowed HTTP methods
                 .allowedHeaders("*"); // Or specify allowed headers if needed

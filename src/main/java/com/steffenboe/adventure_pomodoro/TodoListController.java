@@ -19,10 +19,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/todos")
-@CrossOrigin(origins = "http://localhost:3000", methods = { org.springframework.web.bind.annotation.RequestMethod.GET,
-        org.springframework.web.bind.annotation.RequestMethod.POST,
-        org.springframework.web.bind.annotation.RequestMethod.PUT,
-        org.springframework.web.bind.annotation.RequestMethod.DELETE })
 public class TodoListController {
 
     private final TodoRepository todoRepository;
