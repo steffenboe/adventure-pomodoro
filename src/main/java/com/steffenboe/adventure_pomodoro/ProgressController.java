@@ -1,6 +1,7 @@
 package com.steffenboe.adventure_pomodoro;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/progress")
+@CrossOrigin(origins = { "https://adventure-pomodoro-j7inpp7h2q-ey.a.run.app/" })
 public class ProgressController {
 
     private final ProgressRepository progressRepository;

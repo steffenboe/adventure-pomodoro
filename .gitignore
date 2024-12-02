@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/resources/adventure-pomodoro-firebase-adminsdk-c5bfw-94b2af2f83.json
+
+src/main/resources/static/
+application-prod.yml

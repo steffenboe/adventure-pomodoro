@@ -1,6 +1,7 @@
 package com.steffenboe.adventure_pomodoro;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/rewards")
+@CrossOrigin(origins = { "https://adventure-pomodoro-j7inpp7h2q-ey.a.run.app" })
 public class RewardController {
     
     private final RewardRepository rewardRepository;
