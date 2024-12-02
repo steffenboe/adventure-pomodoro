@@ -11,13 +11,14 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@Profile("!prod")
+@Profile("local")
 @EnableWebFluxSecurity
 public class UnsecuredSecurityConfig {
 
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
+                .cors(cors -> cors.disable())
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/market").permitAll()
                         .pathMatchers("/").permitAll()
@@ -31,7 +32,6 @@ public class UnsecuredSecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyExchange().authenticated())
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(withDefaults()));
         return http.build();
