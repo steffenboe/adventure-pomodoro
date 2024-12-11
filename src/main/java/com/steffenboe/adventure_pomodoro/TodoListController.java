@@ -1,7 +1,9 @@
 package com.steffenboe.adventure_pomodoro;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
+import org.checkerframework.checker.units.qual.t;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +21,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/todos")
-@CrossOrigin(origins = { "https://adventure-pomodoro-j7inpp7h2q-ey.a.run.app" })
 public class TodoListController {
 
     private final TodoRepository todoRepository;
@@ -55,6 +56,16 @@ public class TodoListController {
                 })
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest()
                         .body("Todo not found")));
+    }
+
+    @PutMapping("/clearLabels")
+    public Mono<ResponseEntity<Void>> clearLabels() {
+        return todoRepository.findAll()
+                .flatMap(todo -> {
+                    todo.setLabels(new ArrayList<>());
+                    return todoRepository.save(todo);
+                })
+                .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     @DeleteMapping("/{id}")

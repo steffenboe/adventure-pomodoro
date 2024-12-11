@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/rewards")
-@CrossOrigin(origins = { "https://adventure-pomodoro-j7inpp7h2q-ey.a.run.app" })
 public class RewardController {
     
     private final RewardRepository rewardRepository;

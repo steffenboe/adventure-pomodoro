@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/marketplace")
-@CrossOrigin(origins = { "https://adventure-pomodoro-j7inpp7h2q-ey.a.run.app/" })
+@CrossOrigin(origins = { "http://localhost:8080/**", "http://localhost:3000" })
 public class MarketplaceController {
 
     private final ItemRepository itemRepository;
