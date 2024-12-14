@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -21,13 +22,20 @@ public class ProgressController {
         this.progressRepository = progressRepository;
     }
 
+    @PostConstruct
+    void setupProgress() {
+        progressRepository.findById("1")
+                .switchIfEmpty(progressRepository.save(new Progress("1", 0.0)))
+                .subscribe();
+    }
+
     @PutMapping
     Mono<ResponseEntity<Progress>> updateProgress(@RequestBody double update) {
         return fetchProgress()
                 .flatMap(progress -> {
 
                     Progress progressEntity;
-                    if(update == 1){
+                    if (update == 1) {
                         progressEntity = new Progress("1", 0.0);
                     } else {
                         progressEntity = new Progress("1", update);

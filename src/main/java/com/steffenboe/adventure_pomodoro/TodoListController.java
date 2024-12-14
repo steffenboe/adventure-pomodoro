@@ -1,6 +1,7 @@
 package com.steffenboe.adventure_pomodoro;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.checkerframework.checker.units.qual.t;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -27,6 +29,13 @@ public class TodoListController {
 
     public TodoListController(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
+    }
+
+    @PostConstruct
+    void setupTodos() {
+        todoRepository.findAll().switchIfEmpty(todoRepository
+                .save(new Todo(UUID.randomUUID().toString(), "Test Todo", false, null, Collections.emptyList())))
+                .subscribe();
     }
 
     @PostMapping

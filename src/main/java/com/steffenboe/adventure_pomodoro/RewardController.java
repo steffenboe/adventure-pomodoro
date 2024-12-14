@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -18,6 +19,13 @@ public class RewardController {
 
     public RewardController(RewardRepository rewardRepository) {
         this.rewardRepository = rewardRepository;
+    }
+
+    @PostConstruct
+    void setupReward() {
+        rewardRepository.findById("1")
+                .switchIfEmpty(rewardRepository.save(new Reward("1", 0)))
+                .subscribe();
     }
 
     @PutMapping

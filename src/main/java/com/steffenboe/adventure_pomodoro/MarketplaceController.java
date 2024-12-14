@@ -22,10 +22,13 @@ public class MarketplaceController {
 
     private final ItemRepository itemRepository;
     private final RewardRepository rewardRepository;
+    private final InventoryRepository inventoryRepository;
 
-    MarketplaceController(ItemRepository itemRepository, RewardRepository rewardRepository) {
+    MarketplaceController(ItemRepository itemRepository, RewardRepository rewardRepository,
+            InventoryRepository inventoryRepository) {
         this.itemRepository = itemRepository;
         this.rewardRepository = rewardRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @GetMapping
@@ -49,7 +52,9 @@ public class MarketplaceController {
                         .flatMap(reward -> {
                             if (reward.amount() >= item.price()) {
                                 return rewardRepository.save(new Reward(reward.id(), reward.amount() - item.price()))
-                                        .then(itemRepository.deleteById(itemId));
+                                        .then(itemRepository.deleteById(itemId))
+                                        .then(inventoryRepository.findById("1"))
+                                        .flatMap(inventory -> inventoryRepository.save(inventory.addItem(item)));
                             } else {
                                 return Mono.empty();
                             }
