@@ -1,12 +1,15 @@
 package com.steffenboe.adventure_pomodoro;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +23,13 @@ public class InventoryController {
 
     private final InventoryRepository inventoryRepository;
     private final ItemRepository itemRepository;
+    private final TodoRepository todoRepository;
 
-    public InventoryController(InventoryRepository inventoryRepository, ItemRepository itemRepository) {
+    public InventoryController(InventoryRepository inventoryRepository, ItemRepository itemRepository,
+            TodoRepository todoRepository) {
         this.inventoryRepository = inventoryRepository;
         this.itemRepository = itemRepository;
+        this.todoRepository = todoRepository;
     }
 
     @PostConstruct
@@ -49,6 +55,26 @@ public class InventoryController {
                 .flatMap(inventory -> inventoryRepository.save(inventory)
                         .map(ResponseEntity::ok)
                         .switchIfEmpty(Mono.just(ResponseEntity.notFound().build())));
+    }
+
+    @PutMapping("/items/{itemId}/use")
+    Mono<ResponseEntity<Inventory>> useItem(@PathVariable String itemId) {
+        return inventoryRepository.findById("1")
+                .map(inventory -> {
+                    inventory.getItems().stream().filter(item -> item.id().equals(itemId)).findFirst()
+                            .ifPresent(item -> {
+                                todoRepository
+                                        .save(new Todo(UUID.randomUUID().toString(), item.name(), false, "",
+                                                List.of("New!")))
+                                        .subscribe();
+                            });
+                    return inventory.removeItem(itemId);
+                })
+                .flatMap(inventory -> {
+                    return inventoryRepository.save(inventory)
+                            .map(ResponseEntity::ok)
+                            .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                });
     }
 
     @GetMapping("/equipment")

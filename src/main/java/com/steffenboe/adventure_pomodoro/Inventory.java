@@ -31,5 +31,9 @@ public class Inventory {
         return new Inventory(playerId, new HashSet<Item>(items));
     }
 
+    public Inventory removeItem(String itemId) {
+        return new Inventory(playerId,
+                new HashSet<Item>(items.stream().filter(item -> !item.id().equals(itemId)).toList()));
+    }
 
 }

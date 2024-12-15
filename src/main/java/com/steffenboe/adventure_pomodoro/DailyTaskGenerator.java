@@ -27,17 +27,6 @@ public class DailyTaskGenerator {
         this.dailyGenerationRepository = dailyGenerationRepository;
     }
 
-    private boolean isSameDay(Date date1, Date date2) {
-        Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(date1);
-        cal2.setTime(date2);
-
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
-                cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
-    }
-
     @PostConstruct
     void generateTasks() {
         dailyGenerationRepository.findById("1")
@@ -55,7 +44,8 @@ public class DailyTaskGenerator {
                         tasks.add(new Todo(UUID.randomUUID().toString(), "Küche putzen", false, "", List.of("New!")));
                         tasks.add(new Todo(UUID.randomUUID().toString(), "Wohnzimmer saugen", false, "", List.of("New!")));
                         tasks.add(new Todo(UUID.randomUUID().toString(), "Flur saugen", false, "", List.of("New!")));
-                        int randomNumberOfTasks = 2;
+                        tasks.add(new Todo(UUID.randomUUID().toString(), "Sarah küssen", false, "", List.of("New!")));
+                        int randomNumberOfTasks = (int) Math.random() * 4;
                         List<Todo> randomTasks = new ArrayList<>();
                         for(int i = 0; i < randomNumberOfTasks; i++){
                             int randomIndex = (int)(Math.random() * tasks.size());
